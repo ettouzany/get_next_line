@@ -6,7 +6,7 @@
 /*   By: net-touz <net-touz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 16:57:37 by net-touz          #+#    #+#             */
-/*   Updated: 2021/11/22 11:07:40 by net-touz         ###   ########.fr       */
+/*   Updated: 2021/11/23 01:22:46 by net-touz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,32 +17,38 @@
 
 char	*get_next_line(int fd)
 {
-	static int	line_dyal_zap;
-	static int	read_from_buffer_dyal_zap;
+	//static int	read_from_buffer_dyal_zap;
 	char		*c_dyal_zap;
-	long		zap;
+	//long		zap;
+	int			status = 1;
+	size_t i = 0;
+	c_dyal_zap = (char *) malloc(BUFFER_SIZE* sizeof(char));
+	status = read(fd, c_dyal_zap, 1);
+	if(status==1)
+			i++;
 
-	line_dyal_zap++;
-	c_dyal_zap = (char *) calloc(100, sizeof(char));
-	while ()
+	while (status == 1 && *c_dyal_zap != '\n' && *c_dyal_zap && i < BUFFER_SIZE)
 	{
-		read(fd, c_dyal_zap, 1);
+		status = read(fd, ++c_dyal_zap, 1);
+		//printf("%s",c_dyal_zap);
+		i++;
 	}
-	zap = read(fd, c_dyal_zap, 100);
-	c_dyal_zap[zap] = '\0';
-	return (c_dyal_zap);
+	*++c_dyal_zap = '\0';
+	if(!i) return NULL;
+	return (c_dyal_zap-i);
 }
 
-int	main(int ac, char **av)
-{
-	int	fd;
-	//int	sz;
-	char** c;
-	size_t i=-1;
-	//int buff =  
-		c[i] = get_next_line(fd);
-	
-	fd = open("foo.txt", O_RDONLY); 
-	//if (fd < 0) { perror("r1"); exit(1); } 
-	printf("%s",c[0]);
-}
+// int	main()
+// {
+// 	int	fd;
+// 	//int	sz;
+// 	char* c;
+// 	//int i=-1;
+// 	fd = open("foo.txt", O_RDONLY); 
+// 	c = get_next_line(fd);
+// 	while (c != NULL)
+// 	{
+// 		//printf("%s",c);
+// 		c = get_next_line(fd);
+// 	}
+// }
