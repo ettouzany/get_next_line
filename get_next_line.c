@@ -6,49 +6,47 @@
 /*   By: net-touz <net-touz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 16:57:37 by net-touz          #+#    #+#             */
-/*   Updated: 2021/11/23 01:22:46 by net-touz         ###   ########.fr       */
+/*   Updated: 2021/11/29 21:28:46 by net-touz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "get_next_line.h"
 #include <stdlib.h> 
-#include <stdio.h> 
-#include <fcntl.h> 
+#include <unistd.h> 
 
 char	*get_next_line(int fd)
 {
-	//static int	read_from_buffer_dyal_zap;
-	char		*c_dyal_zap;
-	//long		zap;
-	int			status = 1;
-	size_t i = 0;
-	c_dyal_zap = (char *) malloc(BUFFER_SIZE* sizeof(char));
-	status = read(fd, c_dyal_zap, 1);
-	if(status==1)
-			i++;
+	char		*buf;
+	static char	c;
+	int			total;
+	int			status;
+	int			twatel;
 
-	while (status == 1 && *c_dyal_zap != '\n' && *c_dyal_zap && i < BUFFER_SIZE)
+	buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!ft_allocat(buf) || BUFFER_SIZE <= 0)
+		return (NULL);
+	status = ((twatel = 0), 1);
+	while ("allah")
 	{
-		status = read(fd, ++c_dyal_zap, 1);
-		//printf("%s",c_dyal_zap);
-		i++;
+		total = 0;
+		while (status == 1 && c != '\n' && total < BUFFER_SIZE)
+		{
+			status = read(fd, buf + total + twatel, 1);
+			if (status == -1)
+				return (free(buf), NULL);
+			if (status == 0)
+			{
+				if (!twatel && !total)
+					return (free(buf), NULL);
+				return ((buf[total + twatel] = '\0'), ft_strdup(buf));
+			}
+			c = buf[total + twatel];
+			total++;
+		}
+		if (c == '\n')
+			return ((buf[total + twatel] = '\0'), c = 0, buf);
+		buf = ((twatel += total), ft_join(buf, twatel));
+		if (!buf)
+			return (NULL);
 	}
-	*++c_dyal_zap = '\0';
-	if(!i) return NULL;
-	return (c_dyal_zap-i);
 }
-
-// int	main()
-// {
-// 	int	fd;
-// 	//int	sz;
-// 	char* c;
-// 	//int i=-1;
-// 	fd = open("foo.txt", O_RDONLY); 
-// 	c = get_next_line(fd);
-// 	while (c != NULL)
-// 	{
-// 		//printf("%s",c);
-// 		c = get_next_line(fd);
-// 	}
-// }
